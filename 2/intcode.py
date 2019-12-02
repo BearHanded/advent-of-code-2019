@@ -1,7 +1,5 @@
 import sys
 
-fp = open('./input.txt', 'r')
-
 
 def add(a_idx, b_idx, out_idx):
     program[program[out_idx]] = program[program[a_idx]] + program[program[b_idx]]
@@ -14,8 +12,8 @@ def multiply(a_idx, b_idx, out_idx):
 
 
 def exit_program():
-    print "--------------------------"
-    print "program exit: ", program[0]
+    print "-------- PROGRAM END ---------"
+    print "Result: ", program[0], ", Noun & Verb : ", noun, verb
 
 
 def run():
@@ -45,6 +43,7 @@ def run():
 
 
 # RUN
+fp = open('./input.txt', 'r')
 original_state = map(lambda x: int(x), fp.read().split(","))
 program = original_state[:]
 goal = 19690720
@@ -53,15 +52,12 @@ for noun in range(0, 100):
     for verb in range(0, 100):
         # Setup program state
         program = original_state[:]
-        print program
         program[1] = noun
         program[2] = verb
 
         # Run and compare
         program_result = run()
-        print noun, verb
         if program_result == goal:
-            print "--------------------------"
-            print noun, verb
-            sys.exit();
-run()
+            print "---------- MATCH -------------"
+            print "Target: ", goal, ", Noun & Verb : ", noun, verb
+            sys.exit()

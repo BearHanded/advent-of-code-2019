@@ -3,7 +3,7 @@ import sys
 fp = open('./input.txt', 'r')
 
 
-def addition(a_idx, b_idx, out_idx):
+def add(a_idx, b_idx, out_idx):
     program[program[out_idx]] = program[program[a_idx]] + program[program[b_idx]]
     return
 
@@ -20,7 +20,7 @@ def exit_program():
 
 def run():
     opcodes = {
-        1: addition,
+        1: add,
         2: multiply,
         99: exit_program
     }
@@ -38,7 +38,7 @@ def run():
         try:
             operation(cursor + 1, cursor + 2, cursor + 3)
         except:
-            print "An error in the program occured"
+            print "An error in the program occurred"
             break
         cursor += 4  # move to the next opcode
     return program[0]

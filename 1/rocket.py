@@ -9,9 +9,7 @@ def calculate_fuel(mass):
 
 
 fp = open('./input.txt', 'r')
-
-str_array = fp.readlines()
-module_array = map(lambda x: int(x), str_array)
+module_array = map(lambda x: int(x), fp.readlines())
 
 total_fuel = 0
 for module in module_array:
@@ -24,4 +22,4 @@ for module in module_array:
 
     total_fuel += module_cost
 
-print(total_fuel)
+print(int(total_fuel))

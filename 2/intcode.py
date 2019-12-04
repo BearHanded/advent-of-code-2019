@@ -12,8 +12,8 @@ def multiply(a_idx, b_idx, out_idx):
 
 
 def exit_program():
-    print "-------- PROGRAM END ---------"
-    print "Result: ", program[0], ", Noun & Verb : ", noun, verb
+    print("-------- PROGRAM END ---------")
+    print("Result: ", program[0], ", Noun & Verb : ", noun, verb)
 
 
 def run():
@@ -24,7 +24,7 @@ def run():
     }
     cursor = 0
 
-    print program
+    print(program)
 
     while cursor <= len(program):
         if (program[cursor]) == 99:
@@ -36,7 +36,7 @@ def run():
         try:
             operation(cursor + 1, cursor + 2, cursor + 3)
         except:
-            print "An error in the program occurred"
+            print("An error in the program occurred")
             break
         cursor += 4  # move to the next opcode
     return program[0]
@@ -44,7 +44,7 @@ def run():
 
 # RUN
 fp = open('./input.txt', 'r')
-original_state = map(lambda x: int(x), fp.read().split(","))
+original_state = list(map(lambda x: int(x), fp.read().split(",")))
 program = original_state[:]
 goal = 19690720
 
@@ -58,6 +58,6 @@ for noun in range(0, 100):
         # Run and compare
         program_result = run()
         if program_result == goal:
-            print "---------- MATCH -------------"
-            print "Target: ", goal, ", Noun & Verb : ", noun, verb
+            print("---------- MATCH -------------")
+            print("Target: ", goal, ", Noun & Verb : ", noun, verb)
             sys.exit()

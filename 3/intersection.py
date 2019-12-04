@@ -14,11 +14,11 @@ def find_closest_intersection(w_grid):
 
             while curr_y > 0:
                 if curr_y < y_len and curr_x < x_len and w_map[curr_y][curr_x][0] == "X":
-                    print "-------------------------------------- ", time.time() - start_time
-                    print "  Match found at: ", curr_x, ", ", curr_y
-                    print "  Distance: ", distance
-                    print "  Wire lengths: ", w_map[curr_y][curr_x][1]
-                    print "      ", w_map[curr_y][curr_x][1][1] + w_map[curr_y][curr_x][1][3]
+                    print("-------------------------------------- ", time.time() - start_time)
+                    print("  Match found at: ", curr_x, ", ", curr_y)
+                    print("  Distance: ", distance)
+                    print("  Wire lengths: ", w_map[curr_y][curr_x][1])
+                    print("      ", w_map[curr_y][curr_x][1][1] + w_map[curr_y][curr_x][1][3])
 
                     match_found = True
                     break
@@ -52,9 +52,9 @@ def add_wire(x, y, char, wire_name, steps=None):
         wire_map[abs(y)][abs(x)][0] = "X"
         wire_map[abs(y)][abs(x)][1].append(wire_name)
         wire_map[abs(y)][abs(x)][1].append(steps)  # quick hack to finish part 2 of the prompt
-        print '-------------------------------------- ', time.time() - start_time
-        print "  INTERSECTION STEP COUNT: ", x, ", ", y
-        print "  STEPS: ", wire_map[abs(y)][abs(x)][1]
+        print('-------------------------------------- ', time.time() - start_time)
+        print("  INTERSECTION STEP COUNT: ", x, ", ", y)
+        print("  STEPS: ", wire_map[abs(y)][abs(x)][1])
     else:
         wire_map[abs(y)][abs(x)][0] = char
         wire_map[abs(y)][abs(x)][1].append(wire_name)
@@ -104,36 +104,36 @@ def create_map(wire_map):
     max_x += 3
     max_y += 3
 
-    print "DIMENSIONS: ", max_x, max_y
-    print time.time() - start_time, "s"
+    print("DIMENSIONS: ", max_x, max_y)
+    print(time.time() - start_time, "s")
     base_map = [[[".", []] for i in range(max_x)] for j in range(max_y)]
 
     # Log this because the input is friggin huge
-    print "CREATED 1"
-    print time.time() - start_time, "s"
+    print("CREATED 1")
+    print(time.time() - start_time, "s")
     grid = [base_map]
-    print "INSERTED 1"
+    print("INSERTED 1")
 
     grid.append([[[".", []] for i in range(max_x)] for j in range(max_y)])
-    print "CREATED 2"
-    print time.time() - start_time, "s"
+    print("CREATED 2")
+    print(time.time() - start_time, "s")
 
     grid.append([[[".", []] for i in range(max_x)] for j in range(max_y)])
-    print "CREATED 3"
-    print time.time() - start_time, "s"
+    print("CREATED 3")
+    print(time.time() - start_time, "s")
 
     grid.append([[[".", []] for i in range(max_x)] for j in range(max_y)])
 
-    print "CREATED 4"
-    print time.time() - start_time, "s"
+    print("CREATED 4")
+    print(time.time() - start_time, "s")
 
     return grid
 
 
 def pretty_print(w_grid):
     for column in range(len(w_grid[0]) - 1, -1, -1):
-        char_map = map(lambda x: x[0], w_grid[0][column])
-        print ''.join(char_map)
+        char_map = list(map(lambda x: x[0], w_grid[0][column]))
+        print(''.join(char_map))
     return
 
 
@@ -195,4 +195,4 @@ pretty_print(wire_grid)
 
 find_closest_intersection(wire_grid)
 
-print time.time() - start_time, "s"
+print(time.time() - start_time, "s")

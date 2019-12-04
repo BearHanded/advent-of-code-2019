@@ -47,18 +47,18 @@ def validate_password(num):
 
 
 # RUN
-print "--------- TESTS -----------"
-print "111111: ", validate_password(111111)
-print "223450: ", validate_password(223450)
-print "123789: ", validate_password(123789)
-print "112233: ", validate_password(112233)
-print "123444: ", validate_password(123444)
-print "111122: ", validate_password(111122)
-print "---------------------------"
+print("--------- TESTS -----------")
+print("111111: ", validate_password(111111))
+print("223450: ", validate_password(223450))
+print("123789: ", validate_password(123789))
+print("112233: ", validate_password(112233))
+print("123444: ", validate_password(123444))
+print("111122: ", validate_password(111122))
+print("---------------------------")
 
 
 total = 0
 for number in range(INPUT_RANGE[0], INPUT_RANGE[1]):
     total += validate_password(number)
 
-print "TOTAL: ", total
+print("TOTAL: ", total)

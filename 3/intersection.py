@@ -1,8 +1,4 @@
 import time
-import copy
-
-start_time = time.time()
-
 
 ########################
 # Distance Calculation and search
@@ -18,7 +14,7 @@ def find_closest_intersection(w_grid):
 
             while curr_y > 0:
                 if curr_y < y_len and curr_x < x_len and w_map[curr_y][curr_x][0] == "X":
-                    print '-------------------------------------- ', time.time() - start_time
+                    print "-------------------------------------- ", time.time() - start_time
                     print "  Match found at: ", curr_x, ", ", curr_y
                     print "  Distance: ", distance
                     print "  Wire lengths: ", w_map[curr_y][curr_x][1]
@@ -42,11 +38,11 @@ def add_wire(x, y, char, wire_name, steps=None):
     # Select grid clockwise
     if x >= 0 and y >= 0:
         wire_map = wire_grid[0]
-    elif x >= 0 and y < 0:
+    elif x >= 0 > y:
         wire_map = wire_grid[1]
     elif x < 0 and y < 0:
         wire_map = wire_grid[2]
-    elif x < 0 and y >= 0:
+    elif x < 0 <= y:
         wire_map = wire_grid[3]
 
     # Add items
@@ -63,7 +59,6 @@ def add_wire(x, y, char, wire_name, steps=None):
         wire_map[abs(y)][abs(x)][0] = char
         wire_map[abs(y)][abs(x)][1].append(wire_name)
         wire_map[abs(y)][abs(x)][1].append(steps)  # quick hack to finish part 2 of the prompt
-
 
     return
 
@@ -180,10 +175,11 @@ def trace_wire(wire_route, wire_name):
 ########################
 #  RUN
 ########################
+start_time = time.time()
 # Read in lazy
-fp = open('./input.txt', 'r')
+# fp = open('./input.txt', 'r')
 # fp = open('./test_input.txt', 'r')
-# fp = open('./simple_input.txt', 'r')
+fp = open('./simple_input.txt', 'r')
 
 wires = [
     fp.readline().split(","),
@@ -195,7 +191,7 @@ trace_wire(wires[0], "A")
 trace_wire(wires[1], "B")
 
 # Don't run pretty print for 15,000 lines
-# pretty_print(wire_grid)
+pretty_print(wire_grid)
 
 find_closest_intersection(wire_grid)
 

@@ -1,10 +1,15 @@
 import sys
+
 test_math_input = './test_input.txt'
 test_mult = './test_input_mult.txt'
 puzzle_input = './input.txt'
+puzzle_two = './puzzle_2.txt'
 test_in_out = './in_out.txt'
-PROGRAM_INPUT = 20
-PROGRAM_FILE = puzzle_input
+test_part_2 = './test_part_2.txt'
+PROGRAM_FILE = puzzle_two
+instruct_pointer = 0
+program = []
+
 
 # OPERATIONS ############
 def add(cursor):
@@ -12,7 +17,7 @@ def add(cursor):
     idx_out = program[cursor + 3]
 
     program[idx_out] = params[0] + params[1]
-    return
+    return True
 
 
 def multiply(cursor):
@@ -20,21 +25,21 @@ def multiply(cursor):
     idx_out = program[cursor + 3]
 
     program[idx_out] = params[0] * params[1]
-    return
+    return True
 
 
 def write_in(cursor):
-    idx_out = program[cursor + 1]
+    out_idx = program[cursor + 1]
     user_input = input("Program Input: ")
     user_input = int(user_input)
-    program[idx_out] = user_input
-    return
+    program[out_idx] = user_input
+    return True
 
 
 def write_out(cursor):
     params = get_vals_from_mode(cursor, [cursor + 1])
-    print("---", params[0])
-    return
+    print("- ", params[0])
+    return True
 
 
 def exit_program(cursor):
@@ -45,17 +50,43 @@ def exit_program(cursor):
 
 
 def jump_if_true(cursor):
-    return
+    params = get_vals_from_mode(cursor, [cursor + 1, cursor + 2])
+    if params[0] != 0:
+        global instruct_pointer
+        instruct_pointer = params[1]
+        return False
+    return True
+
 
 def jump_if_false(cursor):
-    return
+    params = get_vals_from_mode(cursor, [cursor + 1, cursor + 2])
+    if params[0] == 0:
+        global instruct_pointer
+        instruct_pointer = params[1]
+        return False
+    return True
 
 
 def less_than(cursor):
-    return
+    params = get_vals_from_mode(cursor, [cursor + 1, cursor + 2])
+    out_idx = program[cursor + 3]
+    if params[0] < params[1]:
+        program[out_idx] = 1
+    else:
+        program[out_idx] = 0
+    return True
+
 
 def equals(cursor):
-    return
+    params = get_vals_from_mode(cursor, [cursor + 1, cursor + 2])
+    out_idx = program[cursor + 3]
+    if params[0] == params[1]:
+        program[out_idx] = 1
+    else:
+        program[out_idx] = 0
+    return True
+
+
 # Helper Functions ##############
 
 def get_vals_from_mode(op_idx, parameter_idxs):
@@ -82,7 +113,6 @@ def get_vals_from_mode(op_idx, parameter_idxs):
     return values
 
 
-
 # Main Cycle ####################
 def run():
     opcodes = {
@@ -93,23 +123,22 @@ def run():
         5: (jump_if_true, 2),
         6: (jump_if_false, 2),
         7: (less_than, 3),
-        8: (equals, 3)
+        8: (equals, 3),
         99: (exit_program, 1)
     }
-    cursor = 0
 
     print(program)
-
-    while cursor < len(program):
+    global instruct_pointer
+    while instruct_pointer < len(program):
         # Pass indexes to operation
-        operation_entry = opcodes.get(program[cursor] % 100)
+        operation_entry = opcodes.get(program[instruct_pointer] % 100)
         operation = operation_entry[0]
         operation_length = operation_entry[1] + 1
 
         # Perform instruction
-        operation(cursor)
-
-        cursor += operation_length  # move to the next opcode
+        continue_normal = operation(instruct_pointer)
+        if continue_normal:
+            instruct_pointer += operation_length  # move to the next opcode
     return program[0]
 
 
@@ -117,7 +146,6 @@ def run():
 fp = open(PROGRAM_FILE, 'r')
 original_state = list(map(lambda x: int(x), fp.read().split(",")))
 program = original_state[:]
-goal = 19690720
 
 # Run and compare
 program_result = run()

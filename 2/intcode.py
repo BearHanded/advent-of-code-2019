@@ -43,7 +43,7 @@ def run():
 
 
 # RUN
-fp = open('./input.txt', 'r')
+fp = open('./test_input.txt', 'r')
 original_state = list(map(lambda x: int(x), fp.read().split(",")))
 program = original_state[:]
 goal = 19690720

@@ -177,7 +177,7 @@ def trace_wire(wire_route, wire_name):
 ########################
 start_time = time.time()
 # Read in lazy
-# fp = open('./input.txt', 'r')
+# fp = open('./test_input.txt', 'r')
 # fp = open('./test_input.txt', 'r')
 fp = open('./simple_input.txt', 'r')
 

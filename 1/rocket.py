@@ -8,7 +8,7 @@ def calculate_fuel(mass):
     return math.floor(mass / 3) - 2
 
 
-fp = open('./input.txt', 'r')
+fp = open('./test_input.txt', 'r')
 module_array = map(lambda x: int(x), fp.readlines())
 
 total_fuel = 0

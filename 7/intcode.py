@@ -1,24 +1,24 @@
 from itertools import permutations
 
+
 def main():
     # Prep Program  and kick off ###############
     fp = open('./input.txt', 'r')
     original_state = list(map(lambda x: int(x), fp.read().split(",")))
 
-    # TODO: try every order of 01234, start with 0
     perms = [''.join(p) for p in permutations('01234')]
     max_value = 0
 
     for entry in perms:
-        program = original_state[:]
-        xmas_computer = XmasComputer(program)
+        signal = 0
+        for phase_setting in entry:
+            print("signal / phase", signal, phase_setting)
+            program = original_state[:]
+            xmas_computer = XmasComputer(program)
+            signal = xmas_computer.run(params=[phase_setting, signal])
 
-        program_result = 0
-        for mode in entry:
-            program_result = xmas_computer.run(params=[program_result, mode])
-
-        if program_result > max_value:
-            max_value = program_result
+        if signal > max_value:
+            max_value = signal
             max_entry = entry
 
     # Run and compare
@@ -39,7 +39,7 @@ class XmasComputer:
         self.set_memory([])
 
     def __init__(self, program):
-        self.set_memory(program)
+        self.set_memory(program[:])
 
     # OPERATIONS ############
     def add(self, cursor):
@@ -73,9 +73,6 @@ class XmasComputer:
         return True
 
     def exit_program(self, cursor):
-        print("-------- PROGRAM END ---------")
-        print(self.memory)
-        print("Result: ", self.memory[0])
         self.exit_flag = True
 
     def jump_if_true(self, cursor):
@@ -150,7 +147,6 @@ class XmasComputer:
             99: (self.exit_program, 1)
         }
 
-        print(self.memory)
         while self.instruct_pointer < len(self.memory) and not self.exit_flag:
             # Pass indexes to operation
             operation_entry = opcodes.get(self.memory[self.instruct_pointer] % 100)

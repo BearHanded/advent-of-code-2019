@@ -14,7 +14,8 @@ def main():
         queues = []
 
         for phase_setting in entry:
-            queues.append([])
+            queues.append([int(phase_setting)])
+        queues[0].append(0)
 
         total_amplifiers = len(queues)
         amplifier_number = 0
@@ -23,31 +24,33 @@ def main():
             if amplifier_number == total_amplifiers - 1:
                 output_queue = 0
             else:
-                output_queue = amplifier_number
+                output_queue = amplifier_number + 1
             xmas_computer = XmasComputer(program, queue_in=queues[amplifier_number], queue_out=queues[output_queue])
             amplifiers.append(xmas_computer)
             amplifier_number += 1
 
         halted_count = 0
         curr_amplifier = 0
-        first_run = True
         while halted_count < total_amplifiers:
             print(entry, curr_amplifier, amplifiers[curr_amplifier].exit_flag)
+            print(queues)
+
             if not amplifiers[curr_amplifier].exit_flag:
-                if first_run:
-                    signal_out = amplifiers[curr_amplifier].run([0])
-                    first_run = False
-                else:
-                    signal_out = amplifiers[curr_amplifier].run()
+                amplifiers[curr_amplifier].run()
                 if amplifiers[curr_amplifier].exit_flag:
                     halted_count += 1
 
             curr_amplifier += 1
             if curr_amplifier >= total_amplifiers:
                 curr_amplifier = 0
-                print(queues)
 
-        print("signal_out = ", signal_out)
+        print("signal_out = ", amplifiers[total_amplifiers - 1].program_output)
+        if amplifiers[total_amplifiers - 1].program_output > max_value:
+            max_value = amplifiers[total_amplifiers - 1].program_output
+            max_signal = entry
+
+    print("max value: ", max_value)
+    print("max signal: ", entry)
 
 
 class XmasComputer:
@@ -100,7 +103,7 @@ class XmasComputer:
                 self.awaiting = True
                 return
             else:
-                user_input = int(self.program_input.pop(0))
+                user_input = int(self.queue_in.pop(0))
                 self.memory[out_idx] = user_input
 
         else:
@@ -113,7 +116,7 @@ class XmasComputer:
 
     def write_out(self, cursor):
         params = self.get_vals_from_mode(cursor, [cursor + 1])
-        if self.queue_out is None:
+        if self.queue_out is not None:
             self.queue_out.append(params[0])
         self.program_output = params[0]
 
@@ -128,7 +131,7 @@ class XmasComputer:
         if params[0] != 0:
             self.instruct_pointer = params[1]
             return
-        self.instruct_pointer += 2
+        self.instruct_pointer += 3
         return
 
     def jump_if_false(self, cursor):
@@ -136,7 +139,7 @@ class XmasComputer:
         if params[0] == 0:
             self.instruct_pointer = params[1]
             return
-        self.instruct_pointer += 2
+        self.instruct_pointer += 3
         return
 
     def less_than(self, cursor):
@@ -199,9 +202,8 @@ class XmasComputer:
             99: self.exit_program,
         }
         if self.awaiting and len(self.queue_in) > 0:
-            self.awaiting == False
+            self.awaiting = False
         while self.instruct_pointer < len(self.memory) and not self.exit_flag and not self.awaiting:
-            print(self.instruct_pointer)
             # Pass indexes to operation
             operation = opcodes.get(self.memory[self.instruct_pointer] % 100)
 

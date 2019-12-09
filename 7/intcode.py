@@ -1,7 +1,36 @@
+from itertools import permutations
+
+def main():
+    # Prep Program  and kick off ###############
+    fp = open('./input.txt', 'r')
+    original_state = list(map(lambda x: int(x), fp.read().split(",")))
+
+    # TODO: try every order of 01234, start with 0
+    perms = [''.join(p) for p in permutations('01234')]
+    max_value = 0
+
+    for entry in perms:
+        program = original_state[:]
+        xmas_computer = XmasComputer(program)
+
+        program_result = 0
+        for mode in entry:
+            program_result = xmas_computer.run(params=[program_result, mode])
+
+        if program_result > max_value:
+            max_value = program_result
+            max_entry = entry
+
+    # Run and compare
+    print("MAX: ", max_value, max_entry)
+
+
 class XmasComputer:
     memory = []
     exit_flag = False
     instruct_pointer = 0
+    program_input = None
+    program_output = None
 
     def set_memory(self, program):
         self.memory = program
@@ -29,13 +58,17 @@ class XmasComputer:
 
     def write_in(self, cursor):
         out_idx = self.memory[cursor + 1]
-        user_input = input("Program Input: ")
-        user_input = int(user_input)
+        if self.program_input is None or len(self.program_input) == 0:
+            user_input = input("Program Input Requested: ")
+            user_input = int(user_input)
+        else:
+            user_input = int(self.program_input.pop(0))
         self.memory[out_idx] = user_input
         return True
 
     def write_out(self, cursor):
         params = self.get_vals_from_mode(cursor, [cursor + 1])
+        self.program_output = params[0]
         print("- ", params[0])
         return True
 
@@ -102,7 +135,8 @@ class XmasComputer:
         return values
 
     # Main Cycle ####################
-    def run(self):
+    def run(self, params=None):
+        self.program_input = params
         self.exit_flag = False
         opcodes = {
             1: (self.add, 3),
@@ -127,4 +161,7 @@ class XmasComputer:
             continue_normal = operation(self.instruct_pointer)
             if continue_normal:
                 self.instruct_pointer += operation_length  # move to the next opcode
-        return self.memory[0]
+        return self.program_output
+
+
+main()

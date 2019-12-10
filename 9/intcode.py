@@ -3,7 +3,7 @@ from itertools import permutations
 
 def main():
     # Prep Program  and kick off ###############
-    fp = open('./input.txt', 'r')
+    fp = open('./boost.txt', 'r')
     # TODO verify big numbers
     # TODO add to any address
     original_state = list(map(lambda x: int(x), fp.read().split(",")))
